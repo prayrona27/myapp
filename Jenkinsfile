@@ -1,26 +1,42 @@
 pipeline {
-    agent any
+    agent any   // Run on any available Jenkins node
 
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/prayrona27/myapp.git'
+                // Checkout code from the repository automatically
+                checkout scm
             }
         }
+
         stage('Build') {
             steps {
+                // Build Maven project on Windows
                 bat 'mvn clean install'
             }
         }
+
         stage('Test') {
             steps {
+                // Run tests
                 bat 'mvn test'
             }
         }
+
         stage('Deploy') {
             steps {
-                echo 'Deploying...'
+                echo 'Deploying the application...' 
+                // Add your deploy commands here
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Check logs!'
         }
     }
 }
